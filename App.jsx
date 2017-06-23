@@ -17,7 +17,7 @@ class App extends React.Component {
            tail: false,
            nose: false,
            nosemsg: 'This field is required',
-           tailmsg: '',
+           tailmsg: 'This field is required',
            mro: false
          },
          success: false
@@ -97,10 +97,12 @@ class App extends React.Component {
      var nose = this.state.nose;
      var success = true;
 
+     this.state.error.tail = false;
      this.state.error.nose = false;
      this.state.error.mro = false;
      //tail
      if(tail===''){
+       this.state.error.tail = true;
        success = false;
      }
 
