@@ -2,53 +2,19 @@
 <html lang = "en">
 <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="bootstrap-3.3.7-dist/css/custom.css" rel="stylesheet">
-<script src="jquery-3.2.1.min.js"></script>
+<script src="jQuery/jquery-3.2.1.min.js"></script>
 <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" type="text/javascript"></script>
-<script>
-//Toggle the history to show or not show on button click
-$(document).ready(function(){
-    $("#toggle").click(function(){
-        $(".history").fadeToggle();
-        $(".activeSometimes").toggleClass("active");
-        $(".activeSometimes").toggleClass("btn-info");
-    });
-});
-
-//Toggle the disabled attribute of the select input of each row of the table
-$(document).ready(function(){
-    $(".edit").click(function(){
-      console.log($(".editable").attr("disabled"));
-      if ($(".editable").attr("disabled")) {
-        $(".editable").removeAttr("disabled");
-        $(".save").fadeToggle();
-    } else {
-      console.log("got here");
-        $(".editable").attr("disabled", "disabled");
-        $(".save").fadeToggle();
-    }
-    });
-});
-
-//Toggle the save button when clicked
-$(document).ready(function(){
-    $(".save").click(function(){
-        $(".save").fadeToggle();
-        $(".editable").attr("disabled", "disabled");
-    });
-});
-
-
-</script>
+<script src="jQuery/jqueryfunc.js"></script>
 
    <head>
       <meta charset = "UTF-8">
       <title>SWAMM</title>
-      <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+      <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png" />
    </head>
    <body>
      <div id="header" class="page-header container-fluid">
 
-         <h2><img src="heart_1.png" alt="Southwest Logo" >
+         <h2><img src="img/heart_1.png" alt="Southwest Logo" >
            SWA MRO Management </h2>
 
      </div>
