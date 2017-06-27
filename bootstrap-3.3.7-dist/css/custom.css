@@ -41,3 +41,29 @@ img{
     right: 0px;
     color: inherit;
 }
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 8px;
+    line-height: 2;
+    vertical-align: middle;
+    border-top: 1px solid #ddd;
+}
+
+.save{
+  display: none;
+}
+
+.td-edit-save{
+  width: 76px;
+}
+
+.btn:focus,.btn:active {
+   outline: none !important;
+}
+
+.btn-info.focus, .btn-info:focus {
+    color: #fff;
+    background-color: #31b0d5;
+    border: none;
+    /* border-color: #1b6d85; */
+}

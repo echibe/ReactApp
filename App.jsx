@@ -160,7 +160,7 @@ class App extends React.Component {
          </div>
      </div>)
       return (
-        <div className = "container-fluid col-xs-8">
+        <div className = "container-fluid col-sm-8 col-xs-12">
 
           {this.state.success ?
             <div className="alert alert-success" role="alert">Successfully entered aircraft!</div> : ''}
