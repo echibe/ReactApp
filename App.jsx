@@ -122,7 +122,7 @@ class App extends React.Component {
 
    pushPlane(event){
      event.preventDefault();
-     console.log("button clicked");
+     console.log("pushPlane");
      if(this.validateInput(this.state.tail)){
        if(this.validateRequired(event)){
          var d = {tail:this.state.tail, nose:this.state.nose, mro:this.state.mro};
