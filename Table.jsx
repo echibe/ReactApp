@@ -12,16 +12,74 @@ class Table extends React.Component {
         filterText: '',
         found: true,
         currentPage: 1,
-        acPerPage: 10
+        acPerPage: 10,
+        elements: [
+          {ID: 0, Tail: 'N123', Nose: '123', MRO: 'Wizard'},
+          {ID: 1, Tail: 'N456', Nose: '456', MRO: 'Trax'},
+          {ID: 2, Tail: 'N789', Nose: '123', MRO: 'MTX'},
+          {ID: 3, Tail: 'N1234', Nose: '1234', MRO: 'Wizard'},
+          {ID: 4, Tail: 'N5678', Nose: '5678', MRO: 'Trax'},
+          {ID: 5, Tail: 'N9123', Nose: '9123', MRO: 'MTX'},
+          {ID: 6, Tail: 'N78678', Nose: '123', MRO: 'Wizard'},
+          {ID: 7, Tail: 'N25235', Nose: '456', MRO: 'Trax'},
+          {ID: 8, Tail: 'N4754', Nose: '123', MRO: 'MTX'},
+          {ID: 9, Tail: 'N2958', Nose: '1234', MRO: 'Wizard'},
+          {ID: 10, Tail: 'N19792', Nose: '5678', MRO: 'Trax'},
+          {ID: 11, Tail: 'N32200', Nose: '9123', MRO: 'MTX'},
+          {ID: 12, Tail: 'N12353', Nose: '123', MRO: 'Wizard'},
+          {ID: 13, Tail: 'N44356', Nose: '456', MRO: 'Trax'},
+          {ID: 14, Tail: 'N7849', Nose: '123', MRO: 'MTX'},
+          {ID: 15, Tail: 'N1334', Nose: '1234', MRO: 'Wizard'},
+          {ID: 16, Tail: 'N2842', Nose: '5678', MRO: 'Trax'},
+          {ID: 17, Tail: 'N9372', Nose: '9123', MRO: 'MTX'},
+          {ID: 18, Tail: 'N3521', Nose: '123', MRO: 'Wizard'},
+          {ID: 19, Tail: 'N26322', Nose: '456', MRO: 'Trax'},
+          {ID: 20, Tail: 'N57574', Nose: '123', MRO: 'MTX'},
+          {ID: 21, Tail: 'N292', Nose: '1234', MRO: 'Wizard'},
+          {ID: 22, Tail: 'N197', Nose: '5678', MRO: 'Trax'},
+          {ID: 23, Tail: 'N3225', Nose: '9123', MRO: 'MTX'},
+          {ID: 24, Tail: 'N19792', Nose: '5678', MRO: 'Trax'},
+          {ID: 25, Tail: 'N32200', Nose: '9123', MRO: 'MTX'},
+          {ID: 26, Tail: 'N12353', Nose: '123', MRO: 'Wizard'},
+          {ID: 27, Tail: 'N44356', Nose: '456', MRO: 'Trax'},
+          {ID: 28, Tail: 'N7849', Nose: '123', MRO: 'MTX'},
+          {ID: 29, Tail: 'N1334', Nose: '1234', MRO: 'Wizard'},
+          {ID: 30, Tail: 'N2842', Nose: '5678', MRO: 'Trax'},
+          {ID: 31, Tail: 'N9372', Nose: '9123', MRO: 'MTX'},
+          {ID: 32, Tail: 'N3521', Nose: '123', MRO: 'Wizard'},
+          {ID: 33, Tail: 'N26322', Nose: '456', MRO: 'Trax'},
+          {ID: 34, Tail: 'N57574', Nose: '123', MRO: 'MTX'},
+          {ID: 35, Tail: 'N292', Nose: '1234', MRO: 'Wizard'},
+          {ID: 36, Tail: 'N197', Nose: '5678', MRO: 'Trax'},
+          {ID: 37, Tail: 'N3225', Nose: '9123', MRO: 'MTX'},
+        ]
       }
       this.saveSelection = this.saveSelection.bind(this);
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleSearchChange = this.handleSearchChange.bind(this);
       this.handlePageChange = this.handlePageChange.bind(this);
+      this.handleEdit = this.handleEdit.bind(this);
    };
+
+   handleEdit(event){
+     console.log("handleEdit");
+     var selectElement = document.getElementById("MRO"+event.target.getAttribute("id"));
+     var saveElement = document.getElementById("save"+event.target.getAttribute("id"));
+     console.log("saveElement: " + saveElement);
+     if(selectElement.hasAttribute("disabled")){
+       selectElement.removeAttribute("disabled");
+       saveElement.removeAttribute("disabled");
+     }
+     else{
+       selectElement.setAttribute("disabled", "disabled");
+       saveElement.setAttribute("disabled", "disabled");
+     }
+   }
 
    saveSelection(event){
       console.log('saveSelection');
+      console.log(event.target);
+      console.log("Value: " + event.target.getAttribute("value"));
       const target = event.target;
       const value =  target.value;
       const name = target.name;
@@ -48,45 +106,31 @@ class Table extends React.Component {
 
    handlePageChange(event){
      console.log('handlePageChange');
-     this.setState({currentPage: Number(event.target.id)});
+     this.state.currentPage = Number(event.target.getAttribute("value"));
+     this.forceUpdate();
    }
 
    render() {
      var filteredElements = [];
-     const elements = [
-       {ID: 0, Tail: 'N123', Nose: '123', MRO: 'Wizard'},
-       {ID: 1, Tail: 'N456', Nose: '456', MRO: 'Trax'},
-       {ID: 2, Tail: 'N789', Nose: '123', MRO: 'MTX'},
-       {ID: 3, Tail: 'N1234', Nose: '1234', MRO: 'Wizard'},
-       {ID: 4, Tail: 'N5678', Nose: '5678', MRO: 'Trax'},
-       {ID: 5, Tail: 'N9123', Nose: '9123', MRO: 'MTX'},
-       {ID: 6, Tail: 'N78678', Nose: '123', MRO: 'Wizard'},
-       {ID: 7, Tail: 'N25235', Nose: '456', MRO: 'Trax'},
-       {ID: 8, Tail: 'N4754', Nose: '123', MRO: 'MTX'},
-       {ID: 9, Tail: 'N2958', Nose: '1234', MRO: 'Wizard'},
-       {ID: 10, Tail: 'N19792', Nose: '5678', MRO: 'Trax'},
-       {ID: 11, Tail: 'N32200', Nose: '9123', MRO: 'MTX'},
-       {ID: 12, Tail: 'N12353', Nose: '123', MRO: 'Wizard'},
-       {ID: 13, Tail: 'N44356', Nose: '456', MRO: 'Trax'},
-       {ID: 14, Tail: 'N7849', Nose: '123', MRO: 'MTX'},
-       {ID: 15, Tail: 'N1334', Nose: '1234', MRO: 'Wizard'},
-       {ID: 16, Tail: 'N2842', Nose: '5678', MRO: 'Trax'},
-       {ID: 17, Tail: 'N9372', Nose: '9123', MRO: 'MTX'},
-       {ID: 18, Tail: 'N3521', Nose: '123', MRO: 'Wizard'},
-       {ID: 19, Tail: 'N26322', Nose: '456', MRO: 'Trax'},
-       {ID: 20, Tail: 'N57574', Nose: '123', MRO: 'MTX'},
-       {ID: 21, Tail: 'N292', Nose: '1234', MRO: 'Wizard'},
-       {ID: 22, Tail: 'N197', Nose: '5678', MRO: 'Trax'},
-       {ID: 23, Tail: 'N3225', Nose: '9123', MRO: 'MTX'},
-     ]
+
 
      //Filter the elements based on tail number
-     for(var i = 0; i<elements.length; i++){
-       if(elements[i].Tail.toUpperCase().includes(this.state.filterText.toUpperCase()) || elements[i].MRO.toUpperCase().includes(this.state.filterText.toUpperCase())){
-         filteredElements.push(elements[i]);
+     for(var i = 0; i<this.state.elements.length; i++){
+       if((this.state.elements[i].Tail.toUpperCase().includes(this.state.filterText.toUpperCase())) || (this.state.elements[i].MRO.toUpperCase().includes(this.state.filterText.toUpperCase()))){
+         filteredElements.push(this.state.elements[i]);
        }
      }
-     console.log(filteredElements);
+
+     //Calulate number of pages needed
+     var numPages = Math.ceil(filteredElements.length / this.state.acPerPage);
+
+     //Generate the HTML elements for pagination
+     var pages = [];
+     for(var i = 0; i < numPages; i++){
+       pages.push(<li className="page-item" key={i+1} ><a className="page-link" onClick={this.handlePageChange} value = {i+1}>{i+1}</a></li>);
+     }
+
+     //Check to make sure there are results, if not display an error
      if(filteredElements.length === 0){
        this.state.found=false;
      }
@@ -100,7 +144,7 @@ class Table extends React.Component {
                           <td>{e.Tail}</td>
                           <td>{e.Nose}</td>
                           <td>
-                            <select value={e.MRO} name='mro' className = 'form-control editable' onChange={this.handleInputChange} disabled>
+                            <select id = {"MRO"+e.ID} value={e.MRO} name='mro' className = 'form-control editable' onChange={this.handleInputChange} disabled>
                               <option value='' disabled>MRO</option>
                               <option value="Wizard">Wizard</option>
                               <option value="Trax">Trax</option>
@@ -108,10 +152,10 @@ class Table extends React.Component {
                             </select>
                           </td>
                           <td className="td-edit-save">
-                            <button className="btn btn-default edit" type="submit">Edit</button>
+                            <button id = {e.ID} className="btn btn-default edit" type="submit" onClick = {this.handleEdit}>Edit</button>
                           </td>
                           <td className="td-edit-save">
-                            <button className="btn btn-default btn-success save" type="submit" onClick = {this.saveSelection}>Save</button>
+                            <button id={"save"+e.ID} className="btn btn-default btn-success save" type="submit" onClick = {this.saveSelection} disabled>Save</button>
                           </td>
                       </tr>
                     )
@@ -119,18 +163,14 @@ class Table extends React.Component {
       // Logic for displaying current aircraft
          const indexOfLastAC = this.state.currentPage * this.state.acPerPage;
          const indexOfFirstAC = indexOfLastAC - this.state.acPerPage;
-         const currentACs = filteredElements.slice(indexOfFirstAC, indexOfLastAC);
+         const currentACs = listItems.slice(indexOfFirstAC, indexOfLastAC);
 
       return (
       <div className = "container-fluid col-sm-8 col-xs-12">
-
-        <div className="row">
           <div className="col-xs-10 input-group ">
-              <div className="input-group-addon">S</div>
+              <div className="input-group-addon">Search</div>
               <input className="form-control" type="text" placeholder="Search by tail number or MRO" value={this.props.filterText} ref="filterTextInput" onChange={this.handleSearchChange}></input>
           </div>
-          <div className="col-xs-2"><span className="badge">Results: {listItems.length}</span></div>
-        </div>
 
         <table className="table table-hover table-condensed">
           <thead>
@@ -144,11 +184,16 @@ class Table extends React.Component {
             </tr>
           </thead>
             <tbody>
-              {listItems}
+              {currentACs}
             </tbody>
         </table>
         {!this.state.found ?
           <div className="alert alert-warning" role="alert">No results found.</div> : ''}
+
+          <ul className="pagination">
+            {pages}
+          </ul>
+
       </div>
       );
    }
