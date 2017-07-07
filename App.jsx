@@ -122,7 +122,7 @@ class App extends React.Component {
 
    pushPlane(event){
      event.preventDefault();
-     console.log("button clicked");
+     console.log("pushPlane");
      if(this.validateInput(this.state.tail)){
        if(this.validateRequired(event)){
          var d = {tail:this.state.tail, nose:this.state.nose, mro:this.state.mro};
@@ -160,27 +160,27 @@ class App extends React.Component {
          </div>
      </div>)
       return (
-        <div className = "container-fluid col-sm-8 col-xs-12">
+        <div className = "container-fluid col-sm-8 col-xs-12 center-block">
 
           {this.state.success ?
             <div className="alert alert-success" role="alert">Successfully entered aircraft!</div> : ''}
 
           <form onSubmit={this.pushPlane}>
-              <h3>Tail Number: {this.state.tail}</h3>
+              <h3>Tail Number: </h3>
               <input name="tail" className = {this.state.error.tail ? 'form-control error' : 'form-control'} type = "text" value = {this.state.tail}
                 onChange = {this.handleInputChange}></input>
               {this.state.error.tail ?
                   <span className="label label-danger">{this.state.error.tailmsg}</span> : ''}<br></br>
 
-              <h3>Nose Number: {this.state.nose}</h3>
+              <h3>Nose Number: </h3>
               <input name="nose" className = {this.state.error.nose ? 'form-control error' : 'form-control'} type = "text" value = {this.state.nose}
                 onChange = {this.handleInputChange}></input>
               {this.state.error.nose ?
                   <span className="label label-danger">{this.state.error.nosemsg}</span> : ''}<br></br>
 
-              <h3>MRO: {this.state.mro}</h3>
+              <h3>MRO: </h3>
               <select name='mro' className = {this.state.error.mro ? 'form-control error' : 'form-control'} value={this.state.mro} onChange={this.handleInputChange}>
-                <option value='' disabled>MRO</option>
+                <option value='' disabled>--</option>
                 <option value="Wizard">Wizard</option>
                 <option value="Trax">Trax</option>
                 <option value="MTX">MTX</option>
