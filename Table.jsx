@@ -64,15 +64,19 @@ class Table extends React.Component {
    handleEdit(event){
      console.log("handleEdit");
      var selectElement = document.getElementById("MRO"+event.target.getAttribute("id"));
-     var saveElement = document.getElementById("save"+event.target.getAttribute("id"));
-     console.log("saveElement: " + saveElement);
+
      if(selectElement.hasAttribute("disabled")){
+       //Change edit button to save button
+       event.target.textContent = "Save";
+       event.target.className += " btn-success";
        selectElement.removeAttribute("disabled");
-       saveElement.removeAttribute("disabled");
      }
      else{
+       //Change Save button to edit button
+       this.saveSelection(event);
+       event.target.textContent = "Edit";
+       event.target.className = "btn btn-default edit";
        selectElement.setAttribute("disabled", "disabled");
-       saveElement.setAttribute("disabled", "disabled");
      }
    }
 
@@ -88,10 +92,8 @@ class Table extends React.Component {
 
    handleInputChange(event) {
       console.log('handleInputChange');
-      const target = event.target;
-      const value =  target.value;
-      const name = target.name;
-
+      const value =  event.target.value;
+      this.state.elements[event.target.getAttribute("id").slice(3)].MRO = value;
       this.setState({
         [name]: value
       });
@@ -152,11 +154,9 @@ class Table extends React.Component {
                             </select>
                           </td>
                           <td className="td-edit-save">
-                            <button id = {e.ID} className="btn btn-default edit" type="submit" onClick = {this.handleEdit}>Edit</button>
+                            <button id = {e.ID} className="btn btn-default edit" type="submit" onClick = {this.handleEdit} value="Edit">Edit</button>
                           </td>
-                          <td className="td-edit-save">
-                            <button id={"save"+e.ID} className="btn btn-default btn-success save" type="submit" onClick = {this.saveSelection} disabled>Save</button>
-                          </td>
+
                       </tr>
                     )
 
@@ -180,7 +180,6 @@ class Table extends React.Component {
               <th>Nose</th>
               <th>MRO</th>
               <th>Edit</th>
-              <th>Save</th>
             </tr>
           </thead>
             <tbody>
