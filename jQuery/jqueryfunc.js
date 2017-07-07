@@ -8,6 +8,7 @@ $(document).ready(function(){
 });
 
 //Toggle the disabled attribute of the select input of each row of the table
+/*
 $(document).ready(function(){
     $(".edit").click(function(){
       console.log($(".editable").attr("disabled"));
@@ -21,11 +22,13 @@ $(document).ready(function(){
     }
     });
 });
-
+*/
 //Toggle the save button when clicked
+/*
 $(document).ready(function(){
     $(".save").click(function(){
         $(".save").fadeToggle();
         $(".editable").attr("disabled", "disabled");
     });
 });
+*/

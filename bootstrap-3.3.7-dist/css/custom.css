@@ -1,3 +1,7 @@
+*{
+  float: none !important;
+}
+
 .page-header {
     padding-bottom: 0px;
     margin: 0px 0 0px;
@@ -47,10 +51,6 @@ img{
     line-height: 2;
     vertical-align: middle;
     border-top: 1px solid #ddd;
-}
-
-.save{
-  display: none;
 }
 
 .td-edit-save{
