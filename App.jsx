@@ -32,7 +32,7 @@ class App extends React.Component {
             elements: [],
         }
 
-        for(var i = 0; i<200; i++){
+        for(var i = 0; i<400; i++){
           var aircraftMappingDummyData = {
             ID: '',
             Tail: '',
@@ -106,7 +106,7 @@ class App extends React.Component {
 
             if (tail.length < 2 || tail.length > 6) {
                 this.state.error.tail = true;
-                this.state.error.tailmsg = 'The length of the tail number must be between 2 and 6.';
+                this.state.error.tailmsg = 'The length of the tail number must be between 2 and 6 characters.';
                 return false;
             } else if (tail[0] != null) {
                 if (tail[0].toUpperCase() != 'N') {
@@ -200,8 +200,8 @@ class App extends React.Component {
                             Nose: this.state.nose,
                             MRO: this.state.mro
                         };
-                        this.state.list.push(d);
-                        this.state.elements.push(d);
+                        this.state.list.unshift(d);
+                        this.state.elements.unshift(d);
                         this.clearInput();
                         this.state.successMsg = "Successfully entered aircraft!";
                         this.state.success = true;
@@ -324,7 +324,6 @@ class App extends React.Component {
         }
 
         const listItemsTable = filteredElements.map((e) => <tr key={e.ID}>
-            <th scope="row">{e.ID}</th>
             <td>{e.Tail}</td>
             <td>{e.Nose}</td>
             <td>
@@ -417,7 +416,6 @@ class App extends React.Component {
                 <table className="table table-hover table-condensed">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Tail</th>
                             <th>Nose</th>
                             <th>MRO</th>
