@@ -67,3 +67,7 @@ img{
     border: none;
     /* border-color: #1b6d85; */
 }
+
+.rightAlign{
+  text-align: right;
+}

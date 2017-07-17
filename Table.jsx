@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Link, browserHistory, IndexRoute  } from 'react-router'
 
-
-class Table extends React.Component {
+export class Table extends React.Component {
 
    constructor(props) {
       super(props);
@@ -166,34 +165,34 @@ class Table extends React.Component {
          const currentACs = listItems.slice(indexOfFirstAC, indexOfLastAC);
 
       return (
-      <div className = "container-fluid col-sm-8 col-xs-12">
-          <div className="col-xs-10 input-group ">
-              <div className="input-group-addon">Search</div>
-              <input className="form-control" type="text" placeholder="Search by tail number or MRO" value={this.props.filterText} ref="filterTextInput" onChange={this.handleSearchChange}></input>
-          </div>
+        <div className = "container-fluid col-sm-8 col-xs-12">
+            <div className="col-xs-10 input-group ">
+                <div className="input-group-addon">Search</div>
+                <input className="form-control" type="text" placeholder="Search by tail number or MRO" value={this.props.filterText} ref="filterTextInput" onChange={this.handleSearchChange}></input>
+            </div>
 
-        <table className="table table-hover table-condensed">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tail</th>
-              <th>Nose</th>
-              <th>MRO</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-            <tbody>
-              {currentACs}
-            </tbody>
-        </table>
-        {!this.state.found ?
-          <div className="alert alert-warning" role="alert">No results found.</div> : ''}
+          <table className="table table-hover table-condensed">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tail</th>
+                <th>Nose</th>
+                <th>MRO</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+              <tbody>
+                {currentACs}
+              </tbody>
+          </table>
+          {!this.state.found ?
+            <div className="alert alert-warning" role="alert">No results found.</div> : ''}
 
-          <ul className="pagination">
-            {pages}
-          </ul>
+            <ul className="pagination">
+              {pages}
+            </ul>
 
-      </div>
+        </div>
       );
    }
 }
