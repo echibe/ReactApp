@@ -71,3 +71,7 @@ img{
 .rightAlign{
   text-align: right;
 }
+
+.form-control[disabled]{
+  color: black;
+}

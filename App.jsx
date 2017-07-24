@@ -8,6 +8,8 @@ class App extends React.Component {
         super(props);
         console.log("constructor");
 
+        var tempElements = props.elements;
+
         this.state = {
             tail: '',
             nose: '',
@@ -29,24 +31,15 @@ class App extends React.Component {
             currentPage: 1,
             acPerPage: 20,
             //Dummy data
-            elements: [],
+            elements: []
         }
 
-        for(var i = 0; i<400; i++){
-          var aircraftMappingDummyData = {
-            ID: '',
-            Tail: '',
-            Nose: '',
-            MRO: ''
-          }
-          aircraftMappingDummyData.ID = i;
-          aircraftMappingDummyData.Tail = ("N00"+(i+1).toString());
-          aircraftMappingDummyData.Nose = ("00"+(i+1).toString());
-          aircraftMappingDummyData.MRO = (i % 2) ? "MTX" : "Trax";
-          this.state.elements.push(aircraftMappingDummyData);
+        for (var i = 0; i < tempElements.length; i++) {
+            this.state.elements.push(tempElements[i]);
         }
+
         this.saveSelection = this.saveSelection.bind(this);
-        this.handleInputChangeTable = this.handleInputChangeTable.bind(this);
+        this.handleInputChangeTableSelect = this.handleInputChangeTableSelect.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
         this.handleAcPerPageChange = this.handleAcPerPageChange.bind(this);
@@ -55,6 +48,8 @@ class App extends React.Component {
         this.clearInput = this.clearInput.bind(this);
         this.pushPlane = this.pushPlane.bind(this);
         this.test = Table.testFunc;
+        this.handleInputChangeTableTail = this.handleInputChangeTableTail.bind(this);
+        this.handleInputChangeTableNose = this.handleInputChangeTableNose.bind(this);
     };
 
     //Triggered when a user changes input data in the form
@@ -69,8 +64,59 @@ class App extends React.Component {
         //Run the tail number on the validator and check existing aircraft mappings
         if (name === "tail") {
             this.validateInput(value);
-            this.checkIfExists(value);
+            this.checkIfExists(value, this.state.nose);
         }
+        else if(name=== "nose"){
+            this.checkIfExists(this.state.tail, value);
+        }
+    }
+
+    handleInputChangeTableTail(event){
+      console.log("handleInputChangeTableTail");
+      const value = event.target.value;
+      var reg = /[^A-Za-z0-9 ]/;
+      for(var i = 0; i<this.state.elements.length; i++){
+        if(this.state.elements[i].ID == event.target.getAttribute("id").slice(1)){
+          var tailElement = document.getElementById('T'+i.toString());
+          var submitButton = document.getElementById(i.toString());
+          //validate the new tail number
+          if(value.length < 2 || value.length > 6 || value.length==0 || reg.test(value) || value[0].toUpperCase()!='N'){
+            submitButton.setAttribute("disabled", "disabled");
+            tailElement.className += " error";
+          }
+          else{
+            //Validated
+            submitButton.removeAttribute("disabled");
+            tailElement.className = "form-control";
+          }
+
+          this.state.elements[i].Tail = value.toUpperCase();
+        }
+      }
+
+      this.forceUpdate();
+    }
+
+    handleInputChangeTableNose(event){
+      console.log("handleInputChangeTableNose");
+      const value = event.target.value;
+      for(var i = 0; i<this.state.elements.length; i++){
+        if(this.state.elements[i].ID == event.target.getAttribute("id").slice(1)){
+          this.state.elements[i].Nose = value;
+        }
+      }
+      this.forceUpdate();
+    }
+
+    handleInputChangeTableSelect(event) {
+        console.log('handleInputChangeTableSelect');
+        const value = event.target.value;
+        for(var i = 0; i<this.state.elements.length; i++){
+          if(this.state.elements[i].ID == event.target.getAttribute("id").slice(3)){
+            this.state.elements[i].MRO = value;
+          }
+        }
+        this.forceUpdate();
     }
 
     //Reset the form data, errors, and submit button
@@ -171,13 +217,30 @@ class App extends React.Component {
         return success;
     }
 
-    checkIfExists(tailNumber) {
+    checkIfExists(tailNumber, noseNumber) {
         console.log("checkIfExists");
         var mro = this.state.mro;
         tailNumber = tailNumber.toUpperCase();
+        noseNumber = noseNumber.toUpperCase();
 
         for (var i = 0; i < this.state.elements.length; i++) {
             if (this.state.elements[i].Tail == tailNumber) {
+                //Aircraft found in list
+                var selectElement = document.getElementById('submitButton');
+                //Check if the nose number matches
+                if(this.state.elements[i].Nose != noseNumber){
+                  //Tail and nose number DO NOT match
+                  this.state.error.nosemsg = "Nose number does not match tail number already in database";
+                  this.state.error.nose = true;
+                  selectElement.setAttribute("disabled", "disabled");
+
+                }
+                else{
+                  //Tail and nose number match
+                  this.state.error.nose = false;
+                  selectElement.removeAttribute("disabled");
+                }
+
                 this.state.alreadyExists = true;
                 return this.state.elements[i].ID;
             }
@@ -192,7 +255,7 @@ class App extends React.Component {
         if (this.validateInput(this.state.tail)) {
             if (this.validateNose(this.state.nose)) {
                 if (this.validateRequired(event)) {
-                    var matchedElement = this.checkIfExists(this.state.tail);
+                    var matchedElement = this.checkIfExists(this.state.tail, this.state.nose);
                     if (!this.state.alreadyExists) {
                         var d = {
                             ID: this.state.elements.length,
@@ -211,7 +274,7 @@ class App extends React.Component {
                         //alert("Success!");
                         //this.forceUpdate();
                     } else {
-                        console.log("Updating: "+ this.state.mro + " of element: "+ matchedElement);
+                        console.log("Updating: " + this.state.mro + " of element: " + matchedElement);
                         this.state.elements[matchedElement].MRO = this.state.mro;
                         this.clearInput();
                         this.state.successMsg = "Updated existing aircraft!";
@@ -241,18 +304,24 @@ class App extends React.Component {
     handleEdit(event) {
         console.log("handleEdit");
         var selectElement = document.getElementById("MRO" + event.target.getAttribute("id"));
+        var tailElement = document.getElementById("T" + event.target.getAttribute("id"));
+        var noseElement = document.getElementById("N" + event.target.getAttribute("id"));
 
         if (selectElement.hasAttribute("disabled")) {
             //Change edit button to save button
             event.target.textContent = "Save";
             event.target.className += " btn-success";
             selectElement.removeAttribute("disabled");
+            tailElement.removeAttribute("disabled");
+            noseElement.removeAttribute("disabled");
         } else {
             //Change Save button to edit button
             this.saveSelection(event);
             event.target.textContent = "Edit";
             event.target.className = "btn btn-default edit";
             selectElement.setAttribute("disabled", "disabled");
+            tailElement.setAttribute("disabled", "disabled");
+            noseElement.setAttribute("disabled", "disabled");
         }
     }
 
@@ -266,16 +335,10 @@ class App extends React.Component {
         console.log(this.state.mroTable);
     }
 
-    handleInputChangeTable(event) {
-        console.log('handleInputChangeTable');
-        const value = event.target.value;
-        this.state.elements[event.target.getAttribute("id").slice(3)].MRO = value;
-        this.setState({[name]: value});
-    }
-
     handleSearchChange(event) {
         console.log('handleSearchChange');
         this.state.filterText = event.target.value;
+        this.state.currentPage = 1;
         console.log(this.state.filterText);
         this.forceUpdate();
     }
@@ -286,10 +349,10 @@ class App extends React.Component {
         this.forceUpdate();
     }
 
-    handleAcPerPageChange(event){
-      console.log('handleAcPerPageChange');
-      this.state.acPerPage = event.target.value;
-      this.forceUpdate();
+    handleAcPerPageChange(event) {
+        console.log('handleAcPerPageChange');
+        this.state.acPerPage = event.target.value;
+        this.forceUpdate();
     }
 
     render() {
@@ -324,10 +387,10 @@ class App extends React.Component {
         }
 
         const listItemsTable = filteredElements.map((e) => <tr key={e.ID}>
-            <td>{e.Tail}</td>
-            <td>{e.Nose}</td>
+            <td><input id={"T" + e.ID} className = "form-control" type="text" value={e.Tail} onChange={this.handleInputChangeTableTail} disabled></input></td>
+            <td><input id={"N" + e.ID} className = "form-control" type="text" value={e.Nose} onChange={this.handleInputChangeTableNose} disabled></input></td>
             <td>
-                <select id={"MRO" + e.ID} value={e.MRO} name='mro' className='form-control editable' onChange={this.handleInputChangeTable} disabled>
+                <select id={"MRO" + e.ID} value={e.MRO} name='mro' className='form-control editable' onChange={this.handleInputChangeTableSelect} disabled>
                     <option value='' disabled>MRO</option>
                     <option value="Wizard">Wizard</option>
                     <option value="Trax">Trax</option>
@@ -387,7 +450,9 @@ class App extends React.Component {
                     <br></br>
 
                     <div className="btn-group" role="group">
-                        <button className={this.state.alreadyExists ? 'btn btn-default btn-success' : 'btn btn-default btn-info'} type="submit">{this.state.alreadyExists
+                        <button id="submitButton" className={this.state.alreadyExists
+                            ? 'btn btn-default btn-success'
+                            : 'btn btn-default btn-info'} type="submit">{this.state.alreadyExists
                                 ? 'Save Existing'
                                 : 'Submit'}</button>
                         <button className="btn btn-default" onClick={this.clearInput} type="button">Clear</button>
@@ -398,19 +463,20 @@ class App extends React.Component {
 
                 <form className="form-inline">
 
-                  <div className="input-group col-xs-6">
-                      <div className="input-group-addon">Search</div>
-                      <input className="form-control" type="text" placeholder="Search by tail number or MRO" value={this.props.filterText} ref="filterTextInput" onChange={this.handleSearchChange}></input>
-                  </div>
+                    <div className="input-group col-xs-6">
+                        <div className="input-group-addon">Search</div>
+                        <input className="form-control" type="text" placeholder="Search by tail number or MRO" value={this.props.filterText} ref="filterTextInput" onChange={this.handleSearchChange}></input>
+                    </div>
 
-                  <div className="form-group col-xs-6 rightAlign">
-                    <label htmlFor="resultsPerPage">Results Per Page: </label>
-                    <select id='resultsPerPage' name='resultsPerPage' className='form-control' value={this.state.acPerPage} onChange={this.handleAcPerPageChange}>
-                        <option value='10'>10</option>
-                        <option value='20'>20</option>
-                        <option value='50'>50</option>
-                    </select>
-                  </div>
+                    <div className="form-group col-xs-6 rightAlign">
+                        <label htmlFor="resultsPerPage">Results Per Page:
+                        </label>
+                        <select id='resultsPerPage' name='resultsPerPage' className='form-control' value={this.state.acPerPage} onChange={this.handleAcPerPageChange}>
+                            <option value='10'>10</option>
+                            <option value='20'>20</option>
+                            <option value='50'>50</option>
+                        </select>
+                    </div>
                 </form>
 
                 <table className="table table-hover table-condensed">
